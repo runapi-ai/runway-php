@@ -52,8 +52,8 @@ All SDK exceptions inherit from `RunApi\Core\Errors\RunApiException`, including 
 ## Links
 
 - Model page: https://runapi.ai/models/runway
-- SDK docs: https://runapi.ai/docs#sdk-runway
-- Product docs: https://runapi.ai/docs#runway
+- SDK docs: https://runapi.ai/docs/resources/sdks
+- Product docs: https://runapi.ai/docs/api/runway/text-to-video
 - Pricing and rate limits: https://runapi.ai/models/runway
 - Full catalog: https://runapi.ai/models
 - GitHub repository: https://github.com/runapi-ai/runway-php

@@ -33,7 +33,7 @@
   "homepage": "https://runapi.ai/models/runway",
   "support": {
     "source": "https://github.com/runapi-ai/runway-php",
-    "docs": "https://runapi.ai/docs#sdk-runway",
+    "docs": "https://runapi.ai/docs/resources/sdks",
     "issues": "https://github.com/runapi-ai/runway-php/issues"
   },
   "keywords": [
