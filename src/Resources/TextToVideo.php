@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Runway\Models\CompletedVideoTaskResponse;
 use RunApi\Runway\Models\VideoTaskResponse;
-use RunApi\Runway\Types;
 
 /**
  * Generates video from a text prompt. Optionally set first_frame_image_url to use an image as the opening frame, turning this into image-to-video generation.
@@ -75,10 +74,8 @@ readonly class TextToVideo extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/runway/text_to_video',
-            'runway/text-to-video',
             VideoTaskResponse::class,
             CompletedVideoTaskResponse::class,
-            Types::TEXT_TO_VIDEO_MODELS,
             'text-to-video',
             VideoTaskResponse::class,
             CompletedVideoTaskResponse::class,

@@ -27,20 +27,17 @@ final class RunwayClientTest extends TestCase
     public function testCreatePostsCompactedBodyToCorrectPath(): void
     {
         $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_1"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1"}')]);
         $client = new RunwayClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $task = $client->textToVideo->create([
             'model' => 'runway',
             'aspect_ratio' => '16:9',
             'duration_seconds' => 5,
-            'first_frame_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
             'output_resolution' => '720p',
             'prompt' => 'A product render',
             'callback_url' => '',
-            'seed' => null,
-        ]);
+            'seed' => null]);
 
         $body = json_decode((string) $transport->requests[0]->getBody(), true, flags: JSON_THROW_ON_ERROR);
 
@@ -55,18 +52,15 @@ final class RunwayClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed","videos":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","videos":[{"url":"https://file.runapi.ai/result"}],"extra_field":"kept","usage":{"cost":0.05}}')]);
         $client = new RunwayClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $result = $client->textToVideo->run([
             'model' => 'runway',
             'aspect_ratio' => '16:9',
             'duration_seconds' => 5,
-            'first_frame_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
             'output_resolution' => '720p',
-            'prompt' => 'A product render',
-        ]);
+            'prompt' => 'A product render']);
 
         self::assertInstanceOf(CompletedVideoTaskResponse::class, $result);
         self::assertSame('https://file.runapi.ai/result', $result->videos[0]->url);
@@ -78,8 +72,7 @@ final class RunwayClientTest extends TestCase
     {
         $transport = new QueueHttpClient([
             new Response(200, [], '{"id":"task_1"}'),
-            new Response(200, [], '{"id":"task_1","status":"completed"}'),
-        ]);
+            new Response(200, [], '{"id":"task_1","status":"completed","usage":{"cost":0.05}}')]);
         $client = new RunwayClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $this->expectException(ValidationException::class);
@@ -89,42 +82,23 @@ final class RunwayClientTest extends TestCase
             'model' => 'runway',
             'aspect_ratio' => '16:9',
             'duration_seconds' => 5,
-            'first_frame_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
             'output_resolution' => '720p',
-            'prompt' => 'A product render',
-        ]);
+            'prompt' => 'A product render']);
     }
 
-    public function testRejectsInvalidContractEnum(): void
-    {
-        $client = new RunwayClient(new ClientOptions(apiKey: 'k', httpClient: new QueueHttpClient([]), maxRetries: 0));
 
-        $this->expectException(ValidationException::class);
-        $this->expectExceptionMessage('aspect_ratio must be one of the allowed values');
-
-        $client->textToVideo->create([
-        'model' => 'runway',
-        'duration_seconds' => 5,
-        'first_frame_image_url' => 'https://cdn.runapi.ai/public/samples/image.jpg',
-        'output_resolution' => '720p',
-        'prompt' => 'A product render',
-        'aspect_ratio' => 'not-valid',
-        ]);
-    }
 
     public function testSecondaryResourceUsesItsOwnPath(): void
     {
         $transport = new QueueHttpClient([
-            new Response(200, [], '{"id":"task_2"}'),
-        ]);
+            new Response(200, [], '{"id":"task_2"}')]);
         $client = new RunwayClient(new ClientOptions(apiKey: 'k', httpClient: $transport, maxRetries: 0));
 
         $client->extendVideo->create([
             'model' => 'runway',
             'output_resolution' => '720p',
             'prompt' => 'A product render',
-            'source_task_id' => 'task_source',
-        ]);
+            'source_task_id' => 'task_source']);
 
         self::assertSame('/api/v1/runway/extend_video', $transport->requests[0]->getUri()->getPath());
     }

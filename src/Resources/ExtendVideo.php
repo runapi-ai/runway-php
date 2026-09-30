@@ -10,7 +10,6 @@ use RunApi\Core\RequestOptions;
 use RunApi\Core\Resources\TypedConfiguredResource;
 use RunApi\Runway\Models\CompletedVideoTaskResponse;
 use RunApi\Runway\Models\VideoTaskResponse;
-use RunApi\Runway\Types;
 
 /**
  * Appends additional footage to a previously generated video, continuing from where the source task left off. Requires the source_task_id of a completed TextToVideo or ExtendVideo task.
@@ -71,10 +70,8 @@ readonly class ExtendVideo extends TypedConfiguredResource
         return new self(
             $http,
             '/api/v1/runway/extend_video',
-            'runway/extend-video',
             VideoTaskResponse::class,
             CompletedVideoTaskResponse::class,
-            Types::EXTEND_VIDEO_MODELS,
             'extend-video',
             VideoTaskResponse::class,
             CompletedVideoTaskResponse::class,
